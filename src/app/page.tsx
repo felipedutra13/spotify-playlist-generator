@@ -1,101 +1,149 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [formData, setFormData] = useState({
+    content: '',
+    numberOfSongs: '',
+    title: ''
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      setIsLoading(true);
+
+      const response = await fetch('/api/playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao criar playlist');
+      }
+
+      alert("Playlist criada com sucesso!");
+      setFormData({
+        content: '',
+        numberOfSongs: '',
+        title: ''
+      });
+    } catch (error) {
+      console.error('Erro:', error);
+      alert("Ocorreu um erro inesperado, tente novamente mais tarde!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  return (
+
+    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
+      <section className="bg-white rounded-lg shadow-sm p-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🎵</span>
+            <h1 className="text-xl font-bold text-black">Gerador de Playlist</h1>
+          </div>
+          <p className="text-gray-600">
+            Crie playlists personalizadas usando Inteligência Artificial!
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex gap-2">
+            <span className="text-green-500">ℹ️</span>
+            <p className="text-sm text-green-700">
+              Digite uma descrição do tipo de música que você quer (por exemplo: "rock dos anos 80 para malhar"
+              ou "música brasileira relaxante para estudar"), escolha quantas músicas deseja e dê um nome para sua playlist.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="longText" className="block text-sm font-medium text-gray-700 mb-1">
+            Descrição
+          </label>
+          <textarea
+            id="content"
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
+            rows={4}
+            className="text-black w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+        </div>
+
+        <div>
+          <label htmlFor="number" className="block text-sm font-medium text-gray-700 mb-1">
+            Quantidade de músicas
+          </label>
+          <input
+            type="number"
+            id="numberOfSongs"
+            name="numberOfSongs"
+            value={formData.numberOfSongs}
+            onChange={handleChange}
+            min="1"
+            max="50"
+            className="text-black w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+        </div>
+
+        <div>
+          <label htmlFor="text" className="block text-sm font-medium text-gray-700 mb-1">
+            Título da Playlist
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="text-black w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          {isLoading ? 'Criando...' : 'Criar playlist'}
+        </button>
+      </form>
+
+      <section className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-lg font-bold mb-4 text-black">Dicas para melhores resultados</h2>
+        <ul className="space-y-2 list-disc pl-4 text-gray-700">
+          <li>Seja específico com gêneros musicais, artistas de referência ou ocasiões</li>
+          <li>Inclua o humor ou energia desejada (ex: alegre, melancólica, energética)</li>
+          <li>Mencione instrumentos específicos se desejar (ex: músicas com piano prominente)</li>
+          <li>Adicione contexto temporal se relevante (ex: clássicos dos anos 90)</li>
+        </ul>
+      </section>
+
     </div>
   );
 }
