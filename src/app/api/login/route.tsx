@@ -13,9 +13,9 @@ export async function GET() {
         throw new Error("Spotify credentials are not configured!");
     }
 
-    var state = generateRandomString(16);
+    const state = generateRandomString(16);
 
-    var scope = 'playlist-modify-public playlist-modify-private user-read-private user-read-email';
+    const scope = 'playlist-modify-public playlist-modify-private user-read-private user-read-email';
     const queryParams = new URLSearchParams({
         response_type: 'code',
         client_id: process.env.SPOTIFY_CLIENT_ID,

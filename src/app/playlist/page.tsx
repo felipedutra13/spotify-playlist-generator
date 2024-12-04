@@ -6,7 +6,6 @@ export default function Playlist() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    alert("TESTE");
     try {
       setIsLoading(true);
 
@@ -22,11 +21,12 @@ export default function Playlist() {
         throw new Error('Falha ao criar playlist');
       }
 
-      const data = await response.json();
+      await response.json();
 
       alert("Playlist gerada com sucesso!");
 
     } catch (error) {
+      console.log(error);
       throw new Error("Ocorreu um erro inesperado, tente novamente mais tarde!");
     } finally {
       setIsLoading(false);

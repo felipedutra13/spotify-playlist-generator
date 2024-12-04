@@ -10,7 +10,7 @@ interface Song {
 }
 
 async function getSongsId(songs: Song[]) {
-    const ids: any = [];
+    const ids: string[] = [];
 
     await Promise.all(
         songs.map(async song => {
@@ -63,6 +63,7 @@ async function search(req: Request) {
         return new Response(JSON.stringify({
             error: {
                 message: "Failed to search!",
+                error: err
             }
         }), { status: 400 });
     }

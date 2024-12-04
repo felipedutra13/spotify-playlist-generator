@@ -70,8 +70,8 @@ export default function Home() {
           <div className="flex gap-2">
             <span className="text-green-500">ℹ️</span>
             <p className="text-sm text-green-700">
-              Digite uma descrição do tipo de música que você quer (por exemplo: "rock dos anos 80 para malhar"
-              ou "música brasileira relaxante para estudar"), escolha quantas músicas deseja e dê um nome para sua playlist.
+              Digite uma descrição do tipo de música que você quer (por exemplo: &quot;rock dos anos 80 para malhar&quot;
+              ou &quot;música brasileira relaxante para estudar&quot;), escolha quantas músicas deseja e dê um nome para sua playlist.
             </p>
           </div>
         </div>

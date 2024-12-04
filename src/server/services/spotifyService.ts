@@ -21,7 +21,7 @@ class SpotifyService {
         let accessToken = null;
 
         try {
-            let response = await fetch(AUTH_URL, {
+            const response = await fetch(AUTH_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -31,8 +31,8 @@ class SpotifyService {
 
             const data = await response.json();
             accessToken = data.access_token;
-        } catch (err: any) {
-            throw new Error("Erro ao obter token do Spotify", err.message);
+        } catch (err) {
+            throw new Error(`Erro ao obter token do Spotify: ${err}`);
         }
 
         return accessToken;
@@ -58,7 +58,7 @@ class SpotifyService {
         let data = null;
 
         try {
-            let response = await fetch(AUTH_URL, {
+            const response = await fetch(AUTH_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -68,8 +68,8 @@ class SpotifyService {
             });
 
             data = await response.json();
-        } catch (err: any) {
-            throw new Error("Erro ao obter token do Spotify", err.message);
+        } catch (err) {
+            throw new Error(`Erro ao obter token do Spotify: ${err}`);
         }
 
         return {
@@ -109,8 +109,8 @@ class SpotifyService {
                     "public": false
                 })
             });
-        } catch (err: any) {
-            throw new Error("Error while creating playlist: ", err);
+        } catch (err) {
+            throw new Error(`Error while creating playlist: ${err}`);
         }
 
         response = await response.json();
@@ -134,8 +134,8 @@ class SpotifyService {
                     'Authorization': accessToken,
                 }
             });
-        } catch (err: any) {
-            throw new Error("Error while searching: ", err);
+        } catch (err) {
+            throw new Error(`Error while searching ${err}`);
         }
 
         response = await response.json();
@@ -159,8 +159,8 @@ class SpotifyService {
                     'Authorization': "Bearer " + accessToken,
                 }
             });
-        } catch (err: any) {
-            throw new Error("Error while getting user data: ", err);
+        } catch (err) {
+            throw new Error(`Error while getting user data: ${err}`);
         }
 
         response = await response.json();
@@ -191,8 +191,8 @@ class SpotifyService {
                     "uris": formatURI(songsId)
                 })
             });
-        } catch (err: any) {
-            throw new Error("Error while adding items to playlist: ", err);
+        } catch (err) {
+            throw new Error(`Error while adding items to playlist: ${err}`);
         }
 
         response = await response.json();
